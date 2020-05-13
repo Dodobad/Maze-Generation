@@ -16,9 +16,17 @@ public class Maze extends Application {
 
   public void mazeLogic(Stage stage){
     VBox box = new VBox();
+
+    recursiveDivision();
+
+
     Scene scene = new Scene(box,1000,1000,Color.WHITESMOKE);
     stage.setTitle("Sequenced Maze Generation");
     stage.setScene(scene);
     stage.show();
+  }
+
+  public void recursiveDivision(){
+    
   }
 }
