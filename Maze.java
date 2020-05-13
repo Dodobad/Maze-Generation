@@ -3,9 +3,14 @@ import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Random;
 
 public class Maze extends Application {
+  private final int x = 15;
+  private final int y = 15;
 
   private Random random = new Random();
   public static void main(String[] args){
@@ -16,57 +21,99 @@ public class Maze extends Application {
     mazeLogic(primaryStage);
   }
 
-  public void mazeLogic(Stage stage){
+  public void mazeLogic(Stage stage) throws InterruptedException {
     VBox box = new VBox();
-    int width = 1000, height = 1000;
-    int[][] grid = new int[1000][1000];
+    int width = x, height = y;
+    int[][] grid = new int[width][height];
+    int[] entrance = {random.nextInt(2), random.nextInt(15)};
+    int[] exit = {random.nextInt(2), random.nextInt(15)};
 
-    recursiveDivision(grid, 0, 0, width, height, chooseDirection(width, height));
+    recursiveDivision(grid, 0, 0);
+    display(grid,entrance,exit);
+    System.out.println(entrance[0] + " "+ entrance[1]);
+    System.out.println(exit[0] +" "+ exit[1]);
 
-
-    Scene scene = new Scene(box,1000,1000,Color.WHITESMOKE);
+    Scene scene = new Scene(box,500,500,Color.WHITESMOKE);
     stage.setTitle("Sequenced Maze Generation");
     stage.setScene(scene);
     stage.show();
   }
 
-  public void recursiveDivision(int[][] grid, int xPos, int yPos, int width, int height, boolean direct){
-    if(width <= 2 || height <= 2) return;
+  public void recursiveDivision(int[][] grid, int xPos, int yPos)
+      throws InterruptedException {
+      
+        DIR[] dirs = DIR.values();
+        Collections.shuffle(Arrays.asList(dirs));
+        
+        for(DIR dir : dirs) {
+          int nx = xPos + dir.dx;
+          int ny = yPos + dir.dy;
+          if(between(nx, x) && between(ny, y) && (grid[nx][ny] == 0)) {
+            grid[xPos][yPos] |= dir.bit;
+            grid[nx][ny] |= dir.opposite.bit;
+            recursiveDivision(grid, nx, ny);
+          }
+        }
+  }
 
-    boolean horizontal = direct;
+  private static boolean between(int v, int upper){
+    return (v >= 0 ) && (v < upper);
+  }
 
-    int wx = xPos + (horizontal ? 0 : random.nextInt(width - 2));
-    int wy = yPos + (horizontal ? random.nextInt(height - 2) : 0);
-    int px = wx + (horizontal ? random.nextInt(width) : 0);
-    int py = wy + (horizontal ? 0: random.nextInt(height));
-    int dx = horizontal ? 1 : 0;
-    int dy = horizontal ? 0 : 1;
-    int length = horizontal ? width: height;
-    int dir = horizontal ? 1 : 2;
+  private enum DIR {
+    N(1, 0, -1), S(2, 0 , 1), E(4, 1, 0), W(8, -1, 0);
+    private final int bit, dx, dy;
+    private DIR opposite;
 
-    for (int i = 0; i < length; i++) {
-      if(wx != px || wy != py) grid[wy][wx] |= dir;
-      wx += dx;
-      wy += dy;
+    static {
+      N.opposite = S;
+      S.opposite = N;
+      E.opposite = W;
+      W.opposite = E;
     }
 
-    int nx = xPos;
-    int ny = yPos;
-    int w = horizontal ? width: wx-xPos + 1;
-    int h = horizontal ? wy - yPos + 1 : height;
+    private DIR(int bit, int dx, int dy) {
+      this.bit = bit;
+      this.dx = dx;
+      this.dy = dy;
+    }
+  };
 
-    recursiveDivision(grid, nx, ny, w, h, chooseDirection(w, h));
+  public void display(int[][] grid, int[] entrance, int[] exit){
+    for ( int i =0; i< y ; i++) {
+      for (int j = 0; j < x; j++){
+        if((grid[j][i] & 1) == 0 && entrance[0] == 0 && j == entrance[1] && i == 0){ 
+          System.out.print("+   ");
+          continue;
+        }
+        System.out.print((grid[j][i] & 1) == 0 ? "+---" : "+   ");
+      }
+      System.out.println("+");
 
-    nx = horizontal ? xPos : wx + 1; 
-    ny = horizontal ? wy + 1 : yPos;
-    w = horizontal ? width : xPos + width - wx - 1;
-    h = horizontal ? yPos + height - wy - 1 : height;
-
-    recursiveDivision(grid, nx, ny, w, h, chooseDirection(w, h));
+      for(int j = 0; j<x; j++){
+        
+        if((grid[j][i] & 8) == 0 && entrance[0] == 1  && i == entrance[1]){ 
+          System.out.print("    ");
+          continue;
+        }
+        System.out.print((grid[j][i] & 8) == 0 ? "|   " : "    ");
+      }
+      if(exit[0] == 1 && i == exit[1]){
+        System.out.println(" ");
+      }
+      else{
+        System.out.println("|");
+      }
+    }
+    for (int j = 0; j < x; j++) {
+      if(exit[0] == 0 && exit[1] == j){
+        System.out.print("+   ");
+      }
+      else{
+      System.out.print("+---");
+      }
+		}
+		System.out.println("+");
   }
 
-  public boolean chooseDirection(double width, double height){
-    if(width < height) return true;
-    return false;
-  }
 }
