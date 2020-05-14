@@ -2,10 +2,10 @@ import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
 import java.util.Arrays;
@@ -85,7 +85,7 @@ public class Maze extends Application {
     }
   };
 
-  public Group display(int[][] grid, int[] entrance, int[] exit){
+  private Group display(int[][] grid, int[] entrance, int[] exit){
     Group textDisplay = new Group();
     
     for ( int i =0; i< y ; i++) {
@@ -127,6 +127,7 @@ public class Maze extends Application {
     
     return textDisplay;
   }
+
   
 
 }
