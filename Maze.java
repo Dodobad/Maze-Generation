@@ -11,8 +11,11 @@ import java.util.Random;
 public class Maze extends Application {
   private final int x = 15;
   private final int y = 15;
-
   private Random random = new Random();
+  private int[] entrance = {random.nextInt(2), random.nextInt(15)};
+  private int[] exit = {random.nextInt(2), random.nextInt(15)};
+
+  
   public static void main(String[] args){
     launch(args);
   }
@@ -25,13 +28,10 @@ public class Maze extends Application {
     VBox box = new VBox();
     int width = x, height = y;
     int[][] grid = new int[width][height];
-    int[] entrance = {random.nextInt(2), random.nextInt(15)};
-    int[] exit = {random.nextInt(2), random.nextInt(15)};
+    
 
     recursiveDivision(grid, 0, 0);
     display(grid,entrance,exit);
-    System.out.println(entrance[0] + " "+ entrance[1]);
-    System.out.println(exit[0] +" "+ exit[1]);
 
     Scene scene = new Scene(box,500,500,Color.WHITESMOKE);
     stage.setTitle("Sequenced Maze Generation");
@@ -51,6 +51,7 @@ public class Maze extends Application {
           if(between(nx, x) && between(ny, y) && (grid[nx][ny] == 0)) {
             grid[xPos][yPos] |= dir.bit;
             grid[nx][ny] |= dir.opposite.bit;
+            // display(grid, entrance, exit);
             recursiveDivision(grid, nx, ny);
           }
         }
