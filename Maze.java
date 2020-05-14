@@ -1,5 +1,9 @@
 import javafx.application.Application;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -9,14 +13,13 @@ import java.util.Collections;
 import java.util.Random;
 
 public class Maze extends Application {
-  private final int x = 15;
-  private final int y = 15;
+  private final int x = 10;
+  private final int y = 10;
   private Random random = new Random();
-  private int[] entrance = {random.nextInt(2), random.nextInt(15)};
-  private int[] exit = {random.nextInt(2), random.nextInt(15)};
+  private int[] entrance = { random.nextInt(2), random.nextInt(15) };
+  private int[] exit = { random.nextInt(2), random.nextInt(15) };
 
-  
-  public static void main(String[] args){
+  public static void main(String[] args) {
     launch(args);
   }
 
@@ -25,15 +28,17 @@ public class Maze extends Application {
   }
 
   public void mazeLogic(Stage stage) throws InterruptedException {
-    VBox box = new VBox();
+
     int width = x, height = y;
     int[][] grid = new int[width][height];
-    
 
     recursiveDivision(grid, 0, 0);
-    display(grid,entrance,exit);
-
-    Scene scene = new Scene(box,500,500,Color.WHITESMOKE);
+    Group displayMaze = display(grid, entrance, exit);
+    // HBox hbox = new HBox(displayMaze);
+    // hbox.setAlignment(Pos.BASELINE_CENTER);
+    // VBox box = new VBox(hbox);
+    // box.setAlignment(Pos.BASELINE_CENTER);
+    Scene scene = new Scene(displayMaze,600,600,Color.WHITESMOKE);
     stage.setTitle("Sequenced Maze Generation");
     stage.setScene(scene);
     stage.show();
@@ -80,7 +85,9 @@ public class Maze extends Application {
     }
   };
 
-  public void display(int[][] grid, int[] entrance, int[] exit){
+  public Group display(int[][] grid, int[] entrance, int[] exit){
+    Group textDisplay = new Group();
+    
     for ( int i =0; i< y ; i++) {
       for (int j = 0; j < x; j++){
         if((grid[j][i] & 1) == 0 && entrance[0] == 0 && j == entrance[1] && i == 0){ 
@@ -88,9 +95,10 @@ public class Maze extends Application {
           continue;
         }
         System.out.print((grid[j][i] & 1) == 0 ? "+---" : "+   ");
+        
       }
       System.out.println("+");
-
+ 
       for(int j = 0; j<x; j++){
         
         if((grid[j][i] & 8) == 0 && entrance[0] == 1  && i == entrance[1]){ 
@@ -105,6 +113,7 @@ public class Maze extends Application {
       else{
         System.out.println("|");
       }
+
     }
     for (int j = 0; j < x; j++) {
       if(exit[0] == 0 && exit[1] == j){
@@ -114,7 +123,10 @@ public class Maze extends Application {
       System.out.print("+---");
       }
 		}
-		System.out.println("+");
+    System.out.println("+");
+    
+    return textDisplay;
   }
+  
 
 }
