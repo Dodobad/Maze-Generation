@@ -17,7 +17,7 @@ public class Maze extends Application {
   private final int y = 10;
   private Random random = new Random();
   private int[] entrance = { random.nextInt(2), random.nextInt(x) };
-  private int[] exit = { random.nextInt(2), random.nextInt(y) };
+  private int[] exit = { entrance[0], random.nextInt(y/2) };
 
   public static void main(String[] args) {
     launch(args);
@@ -127,8 +127,8 @@ public class Maze extends Application {
       }
       if(exit[0] == 1 && i == exit[1]){
         System.out.println(" ");
-        entranceLine2 = 10;
-        exitLine2 = i*20 + 10;
+        entranceLine2 = 10+(20*i);
+        exitLine2 = entranceLine2 + 20;
       }
       else{
         System.out.println("|");
@@ -141,7 +141,7 @@ public class Maze extends Application {
       if(exit[0] == 0 && exit[1] == j){
         System.out.print("+   ");
         entranceLine1 = 10+(20*j);
-        exitLine1 = 30+(20*j);
+        exitLine1 = entranceLine1 + 20;
       }
       else{
       System.out.print("+---");
