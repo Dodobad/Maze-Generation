@@ -89,13 +89,15 @@ public class Maze extends Application {
     Group textDisplay = new Group();
     Line[][] lines = new Line [x][y];
     double startY=10,endY=30, startX=10, endX =30;
-    double entranceLine1,entranceLine2,exitLine1,exitLine2;
+    double entranceLine1=0,entranceLine2=0,exitLine1=0,exitLine2=0;
     for ( int i =0; i< y ; i++) {
       startX=10; 
       endX=30;
       for (int j = 0; j < x; j++){
         if((grid[j][i] & 1) == 0 && entrance[0] == 0 && j == entrance[1] && i == 0){ 
           System.out.print("+   ");
+          startX+=20;   
+          endX+=20;
           continue;
         }
         System.out.print((grid[j][i] & 1) == 0 ? "+---" : "+   ");
@@ -135,15 +137,21 @@ public class Maze extends Application {
     for (int j = 0; j < x; j++) {
       if(exit[0] == 0 && exit[1] == j){
         System.out.print("+   ");
+        entranceLine1 = 10+(20*j);
+        exitLine1 = 30+(20*j);
       }
       else{
       System.out.print("+---");
+      entranceLine1 = endX-20;
+      exitLine1 = endX -20;
       }
 		}
     System.out.println("+");
     Line lineEast = new Line(endX-20, 10, endX-20, endY-20);
-    Line lineSouth = new Line(10, endY-20, endX-20, endY-20);
-    textDisplay.getChildren().addAll(lineEast, lineSouth);
+    //Line lineSouth = new Line(10, endY-20, endX-20, endY-20);
+    Line lineSouth1 = new Line(10,endY-20, entranceLine1, endY-20);
+    Line lineSouth2 = new Line(exitLine1, endY-20, endX-20, endY-20);
+    textDisplay.getChildren().addAll(lineEast, lineSouth1, lineSouth2);
     return textDisplay;
   }
 
