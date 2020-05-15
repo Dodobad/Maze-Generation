@@ -16,8 +16,8 @@ public class Maze extends Application {
   private final int x = 10;
   private final int y = 10;
   private Random random = new Random();
-  private int[] entrance = { random.nextInt(2), random.nextInt(15) };
-  private int[] exit = { random.nextInt(2), random.nextInt(15) };
+  private int[] entrance = { random.nextInt(2), random.nextInt(x) };
+  private int[] exit = { random.nextInt(2), random.nextInt(y) };
 
   public static void main(String[] args) {
     launch(args);
@@ -127,9 +127,12 @@ public class Maze extends Application {
       }
       if(exit[0] == 1 && i == exit[1]){
         System.out.println(" ");
+        entranceLine2 = 10;
+        exitLine2 = i*20 + 10;
       }
       else{
         System.out.println("|");
+        
       }
       startY+=20;
       endY+=20;
@@ -142,16 +145,31 @@ public class Maze extends Application {
       }
       else{
       System.out.print("+---");
-      entranceLine1 = endX-20;
-      exitLine1 = endX -20;
+
       }
 		}
     System.out.println("+");
-    Line lineEast = new Line(endX-20, 10, endX-20, endY-20);
-    //Line lineSouth = new Line(10, endY-20, endX-20, endY-20);
-    Line lineSouth1 = new Line(10,endY-20, entranceLine1, endY-20);
-    Line lineSouth2 = new Line(exitLine1, endY-20, endX-20, endY-20);
-    textDisplay.getChildren().addAll(lineEast, lineSouth1, lineSouth2);
+    
+    if(entranceLine2 !=0){
+      Line lineEast1 = new Line(endX-20, 10, endX-20, entranceLine2);
+      Line lineEast2 = new Line(endX-20, exitLine2, endX-20, endY-20);
+      textDisplay.getChildren().addAll(lineEast1, lineEast2);
+    }
+    else {
+      Line lineEast = new Line(endX-20, 10, endX-20, endY-20);
+      textDisplay.getChildren().addAll(lineEast);
+    }
+
+    if(entranceLine1 !=0){
+      Line lineSouth1 = new Line(10,endY-20, entranceLine1, endY-20);
+      Line lineSouth2 = new Line(exitLine1, endY-20, endX-20, endY-20);
+      textDisplay.getChildren().addAll( lineSouth1, lineSouth2);
+    }
+    else{
+      Line lineSouth = new Line(10, endY-20, endX-20, endY-20);
+      textDisplay.getChildren().addAll(lineSouth);
+    }
+    System.out.println(entrance[0] + " " + entrance [1] + " " + exit[0] + " " + exit[1]);
     return textDisplay;
   }
 
