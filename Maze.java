@@ -88,9 +88,9 @@ public class Maze extends Application {
   private Group display(int[][] grid, int[] entrance, int[] exit){
     Group textDisplay = new Group();
     Line[][] lines = new Line [x][y];
-    double startY=10,endY=40;
+    double startY=10,endY=30;
     for ( int i =0; i< y ; i++) {
-      double startX=10, endX=40;
+      double startX=10, endX=30;
       for (int j = 0; j < x; j++){
         if((grid[j][i] & 1) == 0 && entrance[0] == 0 && j == entrance[1] && i == 0){ 
           System.out.print("+   ");
@@ -101,11 +101,14 @@ public class Maze extends Application {
           lines[j][i] = new Line(startX, startY, endX, startY);
           textDisplay.getChildren().addAll(lines[j][i]);
         }
-        startX+=30;
-        endX+=30;
+        startX+=20;
+        endX+=20;
       }
       System.out.println("+");
- 
+      lines[x-1][i] = new Line(startX, startY, startX+5, startY);
+      textDisplay.getChildren().addAll(lines[x-1][i]);
+      
+      startX = 10;
       for(int j = 0; j<x; j++){
         
         if((grid[j][i] & 8) == 0 && entrance[0] == 1  && i == entrance[1]){ 
@@ -117,6 +120,7 @@ public class Maze extends Application {
         lines[j][i] = new Line(startX, startY, startX, endY);
         textDisplay.getChildren().addAll(lines[j][i]);
         }
+        startX+=20;
       }
       if(exit[0] == 1 && i == exit[1]){
         System.out.println(" ");
@@ -124,8 +128,8 @@ public class Maze extends Application {
       else{
         System.out.println("|");
       }
-      startY+=30;
-      endY+=60;
+      startY+=20;
+      endY+=20;
     }
     for (int j = 0; j < x; j++) {
       if(exit[0] == 0 && exit[1] == j){
