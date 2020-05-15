@@ -88,9 +88,11 @@ public class Maze extends Application {
   private Group display(int[][] grid, int[] entrance, int[] exit){
     Group textDisplay = new Group();
     Line[][] lines = new Line [x][y];
-    double startY=10,endY=30;
+    double startY=10,endY=30, startX=10, endX =30;
+    double entranceLine1,entranceLine2,exitLine1,exitLine2;
     for ( int i =0; i< y ; i++) {
-      double startX=10, endX=30;
+      startX=10; 
+      endX=30;
       for (int j = 0; j < x; j++){
         if((grid[j][i] & 1) == 0 && entrance[0] == 0 && j == entrance[1] && i == 0){ 
           System.out.print("+   ");
@@ -103,10 +105,9 @@ public class Maze extends Application {
         }
         startX+=20;
         endX+=20;
+        
       }
       System.out.println("+");
-      lines[x-1][i] = new Line(startX, startY, startX+5, startY);
-      textDisplay.getChildren().addAll(lines[x-1][i]);
       
       startX = 10;
       for(int j = 0; j<x; j++){
@@ -140,7 +141,9 @@ public class Maze extends Application {
       }
 		}
     System.out.println("+");
-    
+    Line lineEast = new Line(endX-20, 10, endX-20, endY-20);
+    Line lineSouth = new Line(10, endY-20, endX-20, endY-20);
+    textDisplay.getChildren().addAll(lineEast, lineSouth);
     return textDisplay;
   }
 
