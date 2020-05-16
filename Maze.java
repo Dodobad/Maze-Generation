@@ -1,10 +1,8 @@
 import javafx.application.Application;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
@@ -34,11 +32,7 @@ public class Maze extends Application {
 
     recursiveDivision(grid, 0, 0);
     Group displayMaze = display(grid, entrance, exit);
-    // HBox hbox = new HBox(displayMaze);
-    // hbox.setAlignment(Pos.BASELINE_CENTER);
-    // VBox box = new VBox(hbox);
-    // box.setAlignment(Pos.BASELINE_CENTER);
-    Scene scene = new Scene(displayMaze,600,600,Color.WHITESMOKE);
+    Scene scene = new Scene(displayMaze,x*20+40,y*20+40,Color.WHITESMOKE);
     stage.setTitle("Sequenced Maze Generation");
     stage.setScene(scene);
     stage.show();
@@ -95,12 +89,10 @@ public class Maze extends Application {
       endX=30;
       for (int j = 0; j < x; j++){
         if((grid[j][i] & 1) == 0 && entrance[0] == 0 && j == entrance[1] && i == 0){ 
-          System.out.print("+   ");
           startX+=20;   
           endX+=20;
           continue;
         }
-        System.out.print((grid[j][i] & 1) == 0 ? "+---" : "+   ");
         if((grid[j][i] & 1) == 0){
           lines[j][i] = new Line(startX, startY, endX, startY);
           textDisplay.getChildren().addAll(lines[j][i]);
@@ -109,16 +101,13 @@ public class Maze extends Application {
         endX+=20;
         
       }
-      System.out.println("+");
       
       startX = 10;
       for(int j = 0; j<x; j++){
         
         if((grid[j][i] & 8) == 0 && entrance[0] == 1  && i == entrance[1]){ 
-          System.out.print("    ");
           continue;
         }
-        System.out.print((grid[j][i] & 8) == 0 ? "|   " : "    ");
         if((grid[j][i] & 8) == 0){
         lines[j][i] = new Line(startX, startY, startX, endY);
         textDisplay.getChildren().addAll(lines[j][i]);
@@ -126,34 +115,28 @@ public class Maze extends Application {
         startX+=20;
       }
       if(exit[0] == 1 && i == exit[1]){
-        System.out.println(" ");
         entranceLine2 = 10+(20*i);
         exitLine2 = entranceLine2 + 20;
       }
-      else{
-        System.out.println("|");
-        
-      }
+     
       startY+=20;
       endY+=20;
     }
     for (int j = 0; j < x; j++) {
       if(exit[0] == 0 && exit[1] == j){
-        System.out.print("+   ");
         entranceLine1 = 10+(20*j);
         exitLine1 = entranceLine1 + 20;
       }
-      else{
-      System.out.print("+---");
 
-      }
 		}
-    System.out.println("+");
+
     
     if(entranceLine2 !=0){
       Line lineEast1 = new Line(endX-20, 10, endX-20, entranceLine2);
       Line lineEast2 = new Line(endX-20, exitLine2, endX-20, endY-20);
-      textDisplay.getChildren().addAll(lineEast1, lineEast2);
+      Circle circleStart = new Circle(endX-20, entranceLine2+10, 5);
+      circleStart.setFill(Color.RED);
+      textDisplay.getChildren().addAll(lineEast1, lineEast2, circleStart);
     }
     else {
       Line lineEast = new Line(endX-20, 10, endX-20, endY-20);
@@ -163,13 +146,14 @@ public class Maze extends Application {
     if(entranceLine1 !=0){
       Line lineSouth1 = new Line(10,endY-20, entranceLine1, endY-20);
       Line lineSouth2 = new Line(exitLine1, endY-20, endX-20, endY-20);
-      textDisplay.getChildren().addAll( lineSouth1, lineSouth2);
+      Circle circleStart = new Circle(entranceLine1+10,endY-20, 5);
+      circleStart.setFill(Color.RED);
+      textDisplay.getChildren().addAll(lineSouth1, lineSouth2, circleStart);
     }
     else{
       Line lineSouth = new Line(10, endY-20, endX-20, endY-20);
       textDisplay.getChildren().addAll(lineSouth);
     }
-    System.out.println(entrance[0] + " " + entrance [1] + " " + exit[0] + " " + exit[1]);
     return textDisplay;
   }
 
