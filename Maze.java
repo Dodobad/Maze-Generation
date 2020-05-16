@@ -33,7 +33,7 @@ public class Maze extends Application {
     recursiveDivision(grid, 0, 0);
     Group displayMaze = display(grid, entrance, exit);
     Scene scene = new Scene(displayMaze,x*20+40,y*20+40,Color.WHITESMOKE);
-    stage.setTitle("Sequenced Maze Generation");
+    stage.setTitle("Maze");
     stage.setScene(scene);
     stage.show();
   }
